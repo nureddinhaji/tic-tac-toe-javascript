@@ -68,6 +68,8 @@ function updateGameScreen(cell, currentPlayer) {
 function isThereWinner(currentPlayer) {
     if(checkRows(currentPlayer)) return true;
     if(checkColumns(currentPlayer)) return true;
+    if(checkDiagonal(currentPlayer)) return true;
+    if(checkInversDiagonal(currentPlayer)) return true;
 }
 
 function checkRows(currentPlayer) {
@@ -107,6 +109,39 @@ function checkColumns(currentPlayer) {
     }
 }
 
+function checkDiagonal(currentPlayer) {
+    let row = 0;
+
+        while(row < countOfRows) {
+            const cell = gameBoard[row][row];
+            if(cell !== currentPlayer) {
+                row = 0;
+                break;
+            }
+            row++
+        if(row == countOfRows) {
+            return true
+        }
+    }
+}
+
+function checkInversDiagonal(currentPlayer) {
+    let row = 0;
+
+        while(row < countOfRows) {
+            const cell = gameBoard[row][countOfRows - (row + 1)];
+            if(cell !== currentPlayer) {
+                row = 0;
+                break;
+            }
+            row++
+        if(row == countOfRows) {
+            return true
+        }
+    }
+}
+
+
 // Cell Handler Function
 // --------------------------
 
@@ -120,7 +155,7 @@ function cellHandler(event, index) {
     updateGameBoard(index, countOfRows);
     
     if(isThereWinner(currentPlayer)) {
-        alert(win)
+        alert("There is a winner.")
     }
     if (turnsCount == cellsCount) {
         container.insertAdjacentHTML("beforeend", drawPopup);
