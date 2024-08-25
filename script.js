@@ -1,20 +1,27 @@
-let currentPlayer = "X";
+let currentPlayer;
 let xScore = 0;
 let oScore = 0;
 let countOfRows;
 let cellsCount;
 let turnsCount = 0;
 
-const startButton = document.querySelector(".start-button");
-const rowsCountInput = document.querySelector(".cells-count-input");
 const cells = document.querySelector(".cells");
 const container = document.querySelector(".container");
 
 let gameBoard = [];
 
-// Start Game Function
-// -----------------------
 
+function createStartScreen() {
+    cells.innerHTML = `<div class="start"><div class="cells-count"><label for="cells-count-input">Choose the number of rows you want to start the game with.</label><input type="number" class="cells-count-input" name="cells-count-input" id="cells-count-input" value="3" min="3"/></div><div class="start-with"><p>Start the game with</p><fieldset><input type="radio" name="start-with-input" id="start-with-x" value="X" checked><label for="start-with-x">X</label></fieldset><fieldset><input type="radio" name="start-with-input" id="start-with-o" value="O"><label for="start-with-o">O</label></fieldset></div><button class="start-button">Start<svg class="start-button-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.011 6.215c-1.711-.009-3.86.918-5.499 2.557-.625.625-1.176 1.355-1.601 2.174 1.479-1.119 3.057-1.47 4.903-.434.544-1.437 1.27-2.9 2.197-4.297zm9.785 9.773c-1.516.991-3.007 1.706-4.297 2.21 1.036 1.848.686 3.424-.434 4.902.819-.424 1.549-.975 2.175-1.602 1.644-1.642 2.572-3.796 2.556-5.51zm6.152-15.946c-.412-.028-.816-.042-1.213-.042-8.602 0-13.498 6.558-15.28 11.833l4.728 4.729c5.428-1.946 11.817-6.661 11.817-15.172 0-.439-.017-.888-.052-1.348zm-9.888 9.91c-.391-.391-.391-1.023 0-1.414s1.023-.391 1.414 0 .391 1.023 0 1.414-1.024.39-1.414 0zm2.828-2.828c-.781-.78-.781-2.047 0-2.828s2.048-.781 2.828 0c.781.781.781 2.047 0 2.828s-2.047.781-2.828 0zm-14.919 12.454l-.906-.906 5.208-5.188.906.906-5.208 5.188zm4.979 1.857l-.906-.906 3.636-3.664.906.906-3.636 3.664zm-6.042 2.565l-.906-.906 6.448-6.438.906.906-6.448 6.438z"/></svg></button></div>`
+    document.querySelector(".start-button").addEventListener("click", startGame);
+    xScore = 0;
+    oScore = 0;
+    document.querySelector(".player--x .player__score").textContent = 0;
+    document.querySelector(".player--o .player__score").textContent = 0;
+    playAgain();
+};
+createStartScreen();
+document.querySelector(".button--exit").addEventListener("click", createStartScreen)
 // Create game board array
 function createGameBoard(countOfRows) {
     for(let i=0; i < countOfRows; i++) {
@@ -24,9 +31,12 @@ function createGameBoard(countOfRows) {
         }
     }
 }
-const startGame = () => {
-    countOfRows = rowsCountInput.value ;
+function startGame() {
+    countOfRows = document.querySelector(".cells-count-input").value ;
     cellsCount = countOfRows ** 2;
+
+    currentPlayer = document.querySelector("input[name='start-with-input']:checked").value;
+    selectActivePlayer(currentPlayer)
 
     // Change count of rows in css
     document.documentElement.style.setProperty('--rows-count', countOfRows);
@@ -39,24 +49,24 @@ const startGame = () => {
         let cell = document.createRange().createContextualFragment(cellHtml);
 
         cell.querySelector(".cell").addEventListener("click", (event) => {
-            cellHandler(event, i)
+            cellHandler(event, i);
         });
-        cellsContainer.appendChild(cell)
+        cellsContainer.appendChild(cell);
     }
     cells.innerHTML = "";
     cells.appendChild(cellsContainer);
     createGameBoard(countOfRows);
-    selectActivePlayer(currentPlayer)
+    
 }
 
-startButton.addEventListener("click", startGame);
 
 
 // Create a popup function
 function createPopup(message) {
-    const drawPopup = `<div class='popup'><p class='popup__message'>${message}<p><div class='popup__buttons'><button class='popup__button popup__button--playagain'>Play Again</button><button class='popup__button'>Exite</button></div></div>`;
+    const drawPopup = `<div class='popup'><p class='popup__message'>${message}<p><div class='popup__buttons'><button class='popup__button popup__button--playagain'>Play Again</button><button class='popup__button popup__button--exite'>Exit</button></div></div>`;
     container.insertAdjacentHTML("beforeend", drawPopup);
-    document.querySelector(".popup__button--playagain").addEventListener("click", playAgain)
+    document.querySelector(".popup__button--playagain").addEventListener("click", playAgain);
+    document.querySelector(".popup__button--exite").addEventListener("click", createStartScreen)
 }
 
 function selectActivePlayer(currentPlayer) {
@@ -175,6 +185,7 @@ function playAgain() {
     })
 }
 
+document.querySelector(".button--reset").addEventListener("click", playAgain)
 
 // Cell Handler Function
 // --------------------------
