@@ -1,4 +1,5 @@
 let currentPlayer = "X";
+
 let countOfRows;
 let cellsCount;
 let turnsCount = 0;
@@ -7,8 +8,6 @@ const startButton = document.querySelector(".start-button");
 const rowsCountInput = document.querySelector(".cells-count-input");
 const cells = document.querySelector(".cells");
 const container = document.querySelector(".container");
-
-const drawPopup = `<div class='popup'><p class='popup__message'>It is a draw<p><div class='popup__buttons'><button class='popup__button'>Play Again</button><button class='popup__button'>Exite</button></div></div>`;
 
 const gameBoard = [];
 
@@ -42,10 +41,26 @@ const startGame = () => {
             gameBoard[i].push("_")
         }
     }
-    console.log(gameBoard)
+    selectActivePlayer(currentPlayer)
 }
 
 startButton.addEventListener("click", startGame);
+
+
+// Create a popup function
+function createPopup(message) {
+    const drawPopup = `<div class='popup'><p class='popup__message'>${message}<p><div class='popup__buttons'><button class='popup__button'>Play Again</button><button class='popup__button'>Exite</button></div></div>`;
+    container.insertAdjacentHTML("beforeend", drawPopup);
+}
+
+function selectActivePlayer(currentPlayer) {
+    document.querySelector(".player--active")?.classList.remove("player--active");
+    if(currentPlayer === "X") {
+        document.querySelector(".player--x")?.classList.add("player--active");
+    } else {
+        document.querySelector(".player--o")?.classList.add("player--active");
+    }
+}
 
 // Update Gameboard Function
 function updateGameBoard(index, countOfRows) {
@@ -72,9 +87,9 @@ function isThereWinner(currentPlayer) {
     if(checkInversDiagonal(currentPlayer)) return true;
 }
 
+// Function to check if there is a winner in rows
 function checkRows(currentPlayer) {
     let column = 0;
-
     for(row=0; row < countOfRows; row++) {
         while(column < countOfRows) {
             const cell = gameBoard[row][column];
@@ -91,9 +106,9 @@ function checkRows(currentPlayer) {
     }
 }
 
+// Function to check if there is a winner in columns
 function checkColumns(currentPlayer) {
     let row = 0;
-
     for(column=0; column < countOfRows; column++) {
         while(row < countOfRows) {
             const cell = gameBoard[row][column];
@@ -109,9 +124,9 @@ function checkColumns(currentPlayer) {
     }
 }
 
+// Function to check if there is a winner in diagonal
 function checkDiagonal(currentPlayer) {
     let row = 0;
-
         while(row < countOfRows) {
             const cell = gameBoard[row][row];
             if(cell !== currentPlayer) {
@@ -125,9 +140,9 @@ function checkDiagonal(currentPlayer) {
     }
 }
 
+// Function to check if there is a winner in inverse diagonal
 function checkInversDiagonal(currentPlayer) {
     let row = 0;
-
         while(row < countOfRows) {
             const cell = gameBoard[row][countOfRows - (row + 1)];
             if(cell !== currentPlayer) {
@@ -155,10 +170,10 @@ function cellHandler(event, index) {
     updateGameBoard(index, countOfRows);
     
     if(isThereWinner(currentPlayer)) {
-        alert("There is a winner.")
+        createPopup(`${currentPlayer} is win.`)
     }
     if (turnsCount == cellsCount) {
-        container.insertAdjacentHTML("beforeend", drawPopup);
+        createPopup("It is a tie.")
     }
 
     isThereWinner(currentPlayer)
@@ -172,4 +187,5 @@ function cellHandler(event, index) {
     } else {
         currentPlayer = "X"
     }
+    selectActivePlayer(currentPlayer)
 }

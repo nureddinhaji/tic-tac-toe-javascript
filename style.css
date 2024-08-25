@@ -87,6 +87,11 @@ div:has(.popup)::before {
     fill: white;
     gap: 1rem;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.12);
+    border: 3px solid var(--main-light-color);
+}
+
+.player--active {
+    border: 3px solid white;
 }
 
 .player__marker {
