@@ -161,7 +161,7 @@ function cellHandler(event, index) {
     // Update Gameboard
     updateGameBoard(index, countOfRows);
     turnsCount ++ 
-    if(isThereWinner(currentPlayer)) {
+    if(isThereWinner()) {
         createPopup(`${currentPlayer} is win.`)
         if(currentPlayer === "X") {
             xScore++
@@ -180,7 +180,6 @@ function cellHandler(event, index) {
     currentPlayer = currentPlayer === "X" ? "O" : "X";
     selectActivePlayer()
 }
-
 
 document.querySelector(".button--exit").addEventListener("click", createStartScreen);
 createStartScreen();
