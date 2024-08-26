@@ -94,79 +94,43 @@ function updateGameScreen(cell, currentPlayer) {
 
 
 // Check if there is a winner
-function isThereWinner(currentPlayer) {
-    if(checkRows(currentPlayer)) return true;
-    if(checkColumns(currentPlayer)) return true;
-    if(checkDiagonal(currentPlayer)) return true;
-    if(checkInversDiagonal(currentPlayer)) return true;
-    return false
+function isThereWinner() {
+    return checkRows() || checkColumns() || checkDiagonal() || checkInversDiagonal()
 }
 
 // Function to check if there is a winner in rows
-function checkRows(currentPlayer) {
-    let column = 0;
+function checkRows() {
     for(row=0; row < countOfRows; row++) {
-        while(column < countOfRows) {
-            const cell = gameBoard[row][column];
-            if(cell !== currentPlayer) {
-                column = 0;
-                break;
-            }
-            column++
-        }
-        if(column == countOfRows) {
-            return true
-        }
+        const isThereWinner = gameBoard[row].every((col) => {
+            return col === currentPlayer
+        })
+        if(isThereWinner) return isThereWinner
     }
 }
 
 // Function to check if there is a winner in columns
-function checkColumns(currentPlayer) {
-    let row = 0;
+function checkColumns() {
     for(column=0; column < countOfRows; column++) {
-        while(row < countOfRows) {
-            const cell = gameBoard[row][column];
-            if(cell !== currentPlayer) {
-                row = 0;
-                break;
-            }
-            row++
-        }
-        if(row == countOfRows) {
-            return true
-        }
+        const isThereWinner = gameBoard.every((row) => {
+            return row[column] === currentPlayer
+        })
+        if(isThereWinner) return isThereWinner
     }
 }
 
 // Function to check if there is a winner in diagonal
-function checkDiagonal(currentPlayer) {
-    let row = 0;
-        while(row < countOfRows) {
-            const cell = gameBoard[row][row];
-            if(cell !== currentPlayer) {
-                row = 0;
-                break;
-            }
-            row++
-        if(row == countOfRows) {
-            return true
-        }
+function checkDiagonal() {
+    for(let i =0;i < countOfRows;i++) {
+        if(gameBoard[i][i] !== currentPlayer) return false
+        if(i+1 === countOfRows) return true
     }
 }
 
 // Function to check if there is a winner in inverse diagonal
-function checkInversDiagonal(currentPlayer) {
-    let row = 0;
-        while(row < countOfRows) {
-            const cell = gameBoard[row][countOfRows - (row + 1)];
-            if(cell !== currentPlayer) {
-                row = 0;
-                break;
-            }
-            row++
-        if(row == countOfRows) {
-            return true
-        }
+function checkInversDiagonal() {
+    for(let i =0;i < countOfRows;i++) {
+        if(gameBoard[i][countOfRows - (i + 1)] !== currentPlayer) return false
+        if(i+1 === countOfRows) return true
     }
 }
 
